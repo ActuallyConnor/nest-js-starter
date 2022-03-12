@@ -33,3 +33,21 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+.env
+
+# TypeORM
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+
+# API doc artifacts
+api-docs/index.html
+api-docs/openapi.yml
+
+# Artificats
+artifacts
+docs

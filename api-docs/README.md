@@ -1,4 +1,4 @@
-# JuniperCDS API docs
+# Nest.js API docs
 
 This is the API documentation for the Nest.js API. We have chosen to build and publish this as a single projecct, in order to accomplish the following goals:
 
