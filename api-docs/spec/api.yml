@@ -1,0 +1,31 @@
+openapi: 3.0.3
+
+info:
+  title: Nest.js starter
+  description: |
+    This is a description
+  version: 0.0.1
+  license:
+    name: Proprietary
+    url: https://example.com/
+
+# Tag mapping, adds extra information to tags added to resources
+tags:
+  - name: example-tag
+    x-displayName: Example Tag
+    description: Example tag
+
+# Tag groups (supported by Redoc), allows grouping of tags into sections
+x-tagGroups:
+  - name: Nest.js starter
+    tags:
+      - example-tag
+
+servers:
+  - url: 'example.com'
+    description: This is a description
+
+paths:
+  /:
+    $ref: './resources/example/example.yml'
+

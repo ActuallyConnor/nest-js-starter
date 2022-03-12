@@ -1,0 +1,26 @@
+description: Example
+summary: Example
+
+parameters:
+  - $ref: '../../parameters/Identifier.yml'
+
+get:
+  operationId: getExample
+  summary: Get an example
+  description: Get an example
+  tags: [ example-tag ]
+  responses:
+    '200':
+      description: Returns the example
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/example/Example.yml'
+    '400':
+      description: Invalid payload provided
+    '404':
+      description: No resource found
+    '500':
+      description: Internal server error
+    default:
+      description: Unexpected error

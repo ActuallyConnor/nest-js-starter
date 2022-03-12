@@ -1,0 +1,19 @@
+# Lints the API docs on every PR push
+name: api-docs - lint
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+
+  api-docs:
+    name: Build API docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run linting
+        run: make lint-docs

@@ -1,0 +1,36 @@
+# We publish API docs any time we publish code to main.
+name: sdk-docs - publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  publish:
+    name: Publish SDK docs to S3 on changes to `main`
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        working-directory: sdk
+        run: npm install
+
+      - name: Run build
+        working-directory: sdk
+        run: npm run docs
+
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+#          aws-region: us-east-1
+#
+#      - name: Sync API docs to S3
+#        working-directory: sdk
+#        run: |
+#          aws s3 cp --recursive docs s3://${{ secrets.S3_BUCKET }}/sdk-docs/ --sse --acl public-read

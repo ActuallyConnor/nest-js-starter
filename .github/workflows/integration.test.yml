@@ -1,0 +1,60 @@
+name: integration - test
+
+on:
+  pull_request:
+
+jobs:
+
+  integration-tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: Get files from S3 bucket
+        run: |
+          aws s3 cp s3://junipercds-nestjs/environment/.testing.env ./.env
+          chmod 777 ./.env
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2.5.1
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build node container
+        run: |
+          docker build --pull -t nestjs:node-app -f docker/node/app/Dockerfile .
+
+      - name: Start application
+        run: |
+          EXPOSE_PORT=3000 docker-compose -f docker-compose.yml -f docker-compose.test.yml -p nestjs up -d
+
+      - name: Install dependencies
+        working-directory: integration-tests
+        run: npm ci
+
+      - name: Wait for response
+        uses: nev7n/wait_for_response@v1
+        with:
+          url: 'http://localhost:3000/health-check'
+
+      - name: Run Integration tests
+        working-directory: integration-tests
+        run: |
+          TEST_ENDPOINT=http://localhost:3000 ./test.sh
+
+      - name: Get docker-compose logs on failure
+        if: ${{ failure() }}
+        run: |
+          EXPOSE_PORT=3000 docker-compose logs

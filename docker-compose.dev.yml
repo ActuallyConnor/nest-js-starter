@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+
+  node:
+    entrypoint: npm run start:dev
+
+  node-worker:
+    image: nestjs:node-app
+    volumes:
+      - .:/srv
+    working_dir: /srv/integration-tests
+
+  mysql:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: nestjs

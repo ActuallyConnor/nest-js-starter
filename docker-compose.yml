@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+
+  node:
+    image: nestjs:node-app
+    entrypoint: npm run start:prod
+    depends_on:
+      - mysql
+    expose:
+      - 3000
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    volumes:
+      - .:/srv
+    working_dir: /srv
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    expose:
+      - '3306'
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: nestjs
